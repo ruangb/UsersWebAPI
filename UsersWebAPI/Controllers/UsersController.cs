@@ -4,6 +4,7 @@ using UsersWebAPI.Repository;
 
 namespace UsersWebAPI.Controllers
 {
+    [Route("api/[Controller]")]
     public class UsersController : Controller
     {
         private readonly IUserRepository _userRepository;
