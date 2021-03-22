@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections;
+using UsersWebAPI.Models;
 using UsersWebAPI.Repository;
 
 namespace UsersWebAPI.Controllers
@@ -29,6 +30,17 @@ namespace UsersWebAPI.Controllers
                 return NotFound();
 
             return new ObjectResult(user);
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromBody] User user)
+        {
+            if (user == null)
+                return BadRequest();
+
+            _userRepository.Add(user);
+
+            return CreatedAtRoute("GetUser", new { id = user.Id }, user);
         }
     }
 }
