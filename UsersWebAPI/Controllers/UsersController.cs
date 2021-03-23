@@ -43,7 +43,7 @@ namespace UsersWebAPI.Controllers
             return CreatedAtRoute("GetUser", new { id = user.Id }, user);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public IActionResult Update(long id, [FromBody] User user)
         {
             if (user == null || user.Id != id)
@@ -58,6 +58,19 @@ namespace UsersWebAPI.Controllers
             _user.Email = user.Email;
 
             _userRepository.Update(_user);
+
+            return new NoContentResult();
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(long id)
+        {
+            var user = _userRepository.Find(id);
+
+            if (user == null)
+                NotFound();
+
+            _userRepository.Remove(id);
 
             return new NoContentResult();
         }
