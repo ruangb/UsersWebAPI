@@ -42,5 +42,24 @@ namespace UsersWebAPI.Controllers
 
             return CreatedAtRoute("GetUser", new { id = user.Id }, user);
         }
+
+        [HttpPut]
+        public IActionResult Update(long id, [FromBody] User user)
+        {
+            if (user == null || user.Id != id)
+                return BadRequest();
+
+            var _user = _userRepository.Find(id);
+
+            if (_user == null)
+                return NotFound();
+
+            _user.Name = user.Name;
+            _user.Email = user.Email;
+
+            _userRepository.Update(_user);
+
+            return new NoContentResult();
+        }
     }
 }
