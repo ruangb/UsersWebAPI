@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using UsersWebAPI.Models;
 using System.Security.Claims;
 using System.Text;
-using UsersWebAPI.Models;
 
 namespace UsersWebAPI.Controllers
 {
