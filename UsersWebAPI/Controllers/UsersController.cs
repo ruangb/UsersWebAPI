@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections;
 using UsersWebAPI.Models;
 using UsersWebAPI.Repository;
@@ -6,6 +7,7 @@ using UsersWebAPI.Repository;
 namespace UsersWebAPI.Controllers
 {
     [Route("api/[Controller]")]
+    [Authorize()]
     public class UsersController : Controller
     {
         private readonly IUserRepository _userRepository;

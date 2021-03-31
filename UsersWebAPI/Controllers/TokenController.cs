@@ -10,7 +10,7 @@ using System;
 
 namespace UsersWebAPI.Controllers
 {
-    [Route("api/controller")]
+    [Route("api/[Controller]")]
     public class TokenController : Controller
     {
         private readonly IConfiguration _configuration;
@@ -29,7 +29,6 @@ namespace UsersWebAPI.Controllers
                 var claims = new[]
                 {
                     new Claim(ClaimTypes.Name, user.Name),
-                    new Claim(ClaimTypes.Email, user.Email),
                     new Claim(ClaimTypes.Role, "Administrativo")
                 };
 
