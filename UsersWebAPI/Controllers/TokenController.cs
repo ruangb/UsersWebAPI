@@ -10,7 +10,7 @@ using System;
 
 namespace UsersWebAPI.Controllers
 {
-    [Route("api/[Controller]")]
+    [Route("api/[controller]")]
     public class TokenController : Controller
     {
         private readonly IConfiguration _configuration;
@@ -24,15 +24,14 @@ namespace UsersWebAPI.Controllers
         [HttpPost]
         public IActionResult RequestToken([FromBody] User user)
         {
-            if (user.Name == "Ruan" && user.Password == "12345")
+            if (user.Name == "ruan.barros" && user.Password == "123456")
             {
                 var claims = new[]
                 {
-                    new Claim(ClaimTypes.Name, user.Name),
-                    new Claim(ClaimTypes.Role, "Administrativo")
+                    new Claim(ClaimTypes.Name, user.Name)
                 };
 
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecurityKey"]));
+                var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Settings.Secret));
 
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 

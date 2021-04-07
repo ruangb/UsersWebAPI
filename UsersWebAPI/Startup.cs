@@ -26,26 +26,33 @@ namespace UsersWebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddControllers();
 
-            services.AddDbContext<UserDbContext>(options => 
+            services.AddDbContext<UserDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddMvc();
             services.AddTransient<IUserRepository, UserRepository>();
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
+            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Settings.Secret));
+
+            services.AddAuthentication(x =>
+                {
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(
+                options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer           = true,
-                        ValidateAudience         = true,
-                        ValidateLifetime         = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer              = "ruan.barros",
-                        ValidAudience            = "ruan.barros",
-                        IssuerSigningKey         = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SecurityKey"]))
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = false,
+                        ValidateIssuerSigningKey = false,
+                        ValidIssuer = "ruan.barros",
+                        ValidAudience = "ruan.barros",
+                        IssuerSigningKey = key
                     };
 
                     options.Events = new JwtBearerEvents
@@ -62,6 +69,8 @@ namespace UsersWebAPI
                         }
                     };
                 });
+
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,6 +83,9 @@ namespace UsersWebAPI
 
             app.UseHttpsRedirection();
             app.UseRouting();
+
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
             app.UseAuthorization();
             app.UseAuthentication();
             app.UseEndpoints(endpoints =>

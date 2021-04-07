@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections;
 using UsersWebAPI.Models;
 using UsersWebAPI.Repository;
+using System.Collections;
 
 namespace UsersWebAPI.Controllers
 {
-    [Route("api/[Controller]")]
+    [Route("api/[controller]")]
     [Authorize()]
     public class UsersController : Controller
     {
