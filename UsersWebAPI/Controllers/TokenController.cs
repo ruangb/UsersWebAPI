@@ -31,7 +31,7 @@ namespace UsersWebAPI.Controllers
                     new Claim(ClaimTypes.Name, user.Name)
                 };
 
-                var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Settings.Secret));
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["SecurityKey"]));
 
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 

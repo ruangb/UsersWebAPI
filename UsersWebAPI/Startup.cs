@@ -26,7 +26,7 @@ namespace UsersWebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
+            //services.AddCors();
             services.AddControllers();
 
             services.AddDbContext<UserDbContext>(options =>
@@ -34,25 +34,19 @@ namespace UsersWebAPI
 
             services.AddTransient<IUserRepository, UserRepository>();
 
-            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Settings.Secret));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SecurityKey"]));
 
-            services.AddAuthentication(x =>
-                {
-                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(
-                options =>
-                {
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>  {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        ValidateLifetime = false,
-                        ValidateIssuerSigningKey = false,
-                        ValidIssuer = "ruan.barros",
-                        ValidAudience = "ruan.barros",
-                        IssuerSigningKey = key
+                        ValidateIssuer           = true,
+                        ValidateAudience         = true,
+                        ValidateLifetime         = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer              = "ruan.barros",
+                        ValidAudience            = "ruan.barros",
+                        IssuerSigningKey         = key
                     };
 
                     options.Events = new JwtBearerEvents
@@ -84,10 +78,11 @@ namespace UsersWebAPI
             app.UseHttpsRedirection();
             app.UseRouting();
 
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            //app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseAuthorization();
             app.UseAuthentication();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
